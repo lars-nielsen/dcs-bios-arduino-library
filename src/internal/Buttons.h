@@ -2,6 +2,7 @@
 #define __DCSBIOS_BUTTONS_H
 
 #include "Arduino.h"
+#include "DefaultBackends.cpp"
 
 namespace DcsBios {
 	template <unsigned long pollIntervalMs = POLL_EVERY_TIME>
@@ -11,6 +12,7 @@ namespace DcsBios {
 			const char* arg_;
 			char pin_;
 			char lastState_;
+			const DigitalBackend* backend_; 
 
 			void resetState()
 			{
@@ -18,7 +20,7 @@ namespace DcsBios {
 			}
 
 			void pollInput() {
-				char state = digitalRead(pin_);
+				char state = backend_->digitalRead(pin_);
 				if (state != lastState_) {
 					if (lastState_ == HIGH && state == LOW) {
 						while(!tryToSendDcsBiosMessage(msg_, arg_));
@@ -27,14 +29,16 @@ namespace DcsBios {
 				}
 			}
 		public:
-			ActionButtonT(const char* msg, const char* arg, char pin)	 :
+			ActionButtonT(const char* msg, const char* arg, char pin, const DigitalBackend* backend = &DefaultPullUpDigitalBackend)	 :
 				PollingInput(pollIntervalMs)
 			{
 				msg_ = msg;
 				arg_ = arg;
 				pin_ = pin;
-				pinMode(pin_, INPUT_PULLUP);
-				lastState_ = digitalRead(pin_);
+				backend_ = backend;
+
+				backend_->pinMode(pin_);
+				lastState_ = backend_->digitalRead(pin_);
 			}
 
 			void SetControl( const char* msg )
