@@ -2,7 +2,6 @@
 #define __DCSBIOS_BUTTONS_H
 
 #include "Arduino.h"
-#include "DefaultBackends.cpp"
 
 namespace DcsBios {
 	template <unsigned long pollIntervalMs = POLL_EVERY_TIME>
@@ -12,7 +11,7 @@ namespace DcsBios {
 			const char* arg_;
 			char pin_;
 			char lastState_;
-			const DigitalBackend* backend_; 
+			const DigitalReadBackend* backend_; 
 
 			void resetState()
 			{
@@ -29,7 +28,7 @@ namespace DcsBios {
 				}
 			}
 		public:
-			ActionButtonT(const char* msg, const char* arg, char pin, const DigitalBackend* backend = &DefaultPullUpDigitalBackend)	 :
+			ActionButtonT(const char* msg, const char* arg, char pin, const DigitalReadBackend* backend = &DefaultPullUpDigitalReadBackend)	 :
 				PollingInput(pollIntervalMs)
 			{
 				msg_ = msg;

@@ -11,16 +11,19 @@ namespace DcsBios {
 			unsigned int mask;
 			unsigned char pin;
 			bool reverse;
+			const DigitalWriteBackend* backend_; 
+
 		public:
-			LED(unsigned int address, unsigned int mask, char pin, bool reverse = false) : Int16Buffer(address), mask(mask), pin(pin), reverse(reverse) {
-				pinMode(pin, OUTPUT);
+			LED(unsigned int address, unsigned int mask, char pin, bool reverse = false, const DigitalWriteBackend* backend = &DefaultDigitalWriteBackend) : Int16Buffer(address), mask(mask), pin(pin), reverse(reverse) {
+				backend_ = backend;
+				backend_->pinMode(pin);
 			}
 			virtual void loop() {
 				if (hasUpdatedData()) {
 					bool state = getData() & mask;
 					if (reverse) state = !state;
 					
-					digitalWrite(pin, state);					
+					backend_->digitalWrite(pin, state);					
 				}
 			}
 	};

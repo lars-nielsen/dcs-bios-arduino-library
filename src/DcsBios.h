@@ -16,6 +16,7 @@
 #include "internal/Protocol.h"
 #include "internal/Protocol.cpp.inc" // Needs to be a .cpp.inc to allow DCSBIOS_INCOMING_DATA_BUFFER_SIZE
 #include "internal/Addresses.h"
+#include "internal/DefaultBackends.cpp"
 
 
 #ifndef USART0_RX_vect
