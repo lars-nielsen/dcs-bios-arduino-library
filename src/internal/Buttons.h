@@ -11,7 +11,7 @@ namespace DcsBios {
 			const char* arg_;
 			char pin_;
 			char lastState_;
-			const DigitalReadBackend* backend_; 
+			const DigitalBackend* backend_; 
 
 			void resetState()
 			{
@@ -28,7 +28,7 @@ namespace DcsBios {
 				}
 			}
 		public:
-			ActionButtonT(const char* msg, const char* arg, char pin, const DigitalReadBackend* backend = &DefaultPullUpDigitalReadBackend)	 :
+			ActionButtonT(const char* msg, const char* arg, char pin, const DigitalBackend* backend = &DefaultDigitalBackend)	 :
 				PollingInput(pollIntervalMs)
 			{
 				msg_ = msg;
@@ -36,7 +36,7 @@ namespace DcsBios {
 				pin_ = pin;
 				backend_ = backend;
 
-				backend_->pinMode(pin_);
+				backend_->pinMode(pin_, INPUT_PULLUP);
 				lastState_ = backend_->digitalRead(pin_);
 			}
 

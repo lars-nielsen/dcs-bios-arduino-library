@@ -16,7 +16,7 @@ namespace DcsBios {
 		bool reverse_;
 		unsigned long debounceDelay_;
 		unsigned long lastDebounceTime = 0;
-		const DigitalReadBackend* backend_; 
+		const DigitalBackend* backend_; 
 
 		void resetState()
 		{
@@ -43,7 +43,7 @@ namespace DcsBios {
 			}			
 		}
 	public:
-		Switch2PosT(const char* msg, char pin, bool reverse = false, unsigned long debounceDelay = 50, const DigitalReadBackend* backend = &DefaultPullUpDigitalReadBackend) :
+		Switch2PosT(const char* msg, char pin, bool reverse = false, unsigned long debounceDelay = 50, const DigitalBackend* backend = &DefaultDigitalBackend) :
 			PollingInput(pollIntervalMs)
 		{ 
 			msg_ = msg;
@@ -52,7 +52,7 @@ namespace DcsBios {
 			debounceDelay_ = debounceDelay;
 			backend_ = backend;
 
-			backend_->pinMode(pin_);
+			backend_->pinMode(pin_, INPUT_PULLUP);
 			lastState_ = backend_->digitalRead(pin_);
 			if (reverse_) lastState_ = !lastState_;			
 		}
