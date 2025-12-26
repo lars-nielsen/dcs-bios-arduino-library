@@ -23,7 +23,7 @@ namespace DcsBios {
         using PinModeFn = void (*)(uint8_t, uint8_t);      
 
         AnalogReadFn analogRead;
-        AnalogWriteFn analoWrite;
+        AnalogWriteFn analogWrite;
 
         PinModeFn pinMode;
     };
