@@ -11,7 +11,7 @@ namespace DcsBios {
 			const char* arg_;
 			char pin_;
 			char lastState_;
-			const DigitalBackend* backend_; 
+			const DigitalBackend* backend_;
 
 			void resetState()
 			{
@@ -61,6 +61,7 @@ namespace DcsBios {
 			char pin_;
 			char lastState_;
 			bool phase_;
+			const DigitalBackend* backend_;
 
 			void resetState()
 			{
@@ -68,7 +69,7 @@ namespace DcsBios {
 			}
 
 			void pollInput() {
-				char state = digitalRead(pin_);
+				char state = backend_->digitalRead(pin_);
 				if (state != lastState_) {
 					if (lastState_ == HIGH && state == LOW) {
 						// Rising edge
@@ -79,23 +80,24 @@ namespace DcsBios {
 				}
 			}
 		public:
-			ToggleButtonT(const char* msg, const char* argA, const char* argB, char pin)	 :
+			ToggleButtonT(const char* msg, const char* argA, const char* argB, char pin, const DigitalBackend* backend = &DefaultDigitalBackend) :
 				PollingInput(pollIntervalMs)
 			{
 				msg_ = msg;
 				arg_A = argA;
 				arg_B = argB;
 				pin_ = pin;
+				backend_ = backend;
 				phase_ = false;
-				pinMode(pin_, INPUT_PULLUP);
-				lastState_ = digitalRead(pin_);
+				backend_->pinMode(pin_, INPUT_PULLUP);
+				lastState_ = backend_->digitalRead(pin_);
 			}
 
 			void SetControl( const char* msg )
 			{
 				msg_ = msg;
 			}
-        
+
 		void resetThisState()
 		{
 			this->resetState();

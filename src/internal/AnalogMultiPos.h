@@ -15,10 +15,11 @@ namespace DcsBios {
         unsigned char lastState_;
         unsigned long period = 750;
         unsigned long time_now = 0;
+        const AnalogBackend* backend_;
 
         unsigned char readState()
         {
-            unsigned char state = map(analogRead(pin_), 0, 1023, 0, numOfSteps);
+            unsigned char state = map(backend_->analogRead(pin_), 0, 1023, 0, numOfSteps);
             return state;
         }
 
@@ -45,13 +46,14 @@ namespace DcsBios {
         }
 
     public:
-        AnalogMultiPosT(const char *msg, char pin, char numOfSteps_) :
+        AnalogMultiPosT(const char *msg, char pin, char numOfSteps_, const AnalogBackend* backend = &DefaultAnalogBackend) :
 				PollingInput(pollIntervalMs)
         {
             msg_ = msg;
             pin_ = pin;
             lastState_ = readState();
             numOfSteps = numOfSteps_;
+            backend_ = backend;
         }
 
         void SetControl(const char *msg)

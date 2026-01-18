@@ -11,7 +11,7 @@ namespace DcsBios {
 			unsigned int mask;
 			unsigned char pin;
 			bool reverse;
-			const DigitalBackend* backend_; 
+			const DigitalBackend* backend_;
 
 		public:
 			LED(unsigned int address, unsigned int mask, char pin, bool reverse = false, const DigitalBackend* backend = &DefaultDigitalBackend) : Int16Buffer(address), mask(mask), pin(pin), reverse(reverse) {

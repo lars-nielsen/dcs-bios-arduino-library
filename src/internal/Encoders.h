@@ -22,8 +22,9 @@ namespace DcsBios {
 		char pinB_;
 		char lastState_;
 		signed char delta_;
+		const DigitalBackend* backend_;
 		char readState() {
-			return (digitalRead(pinA_) << 1) | digitalRead(pinB_);
+			return (backend_->digitalRead(pinA_) << 1) | backend_->digitalRead(pinB_);
 		}
 		void resetState()
 		{
@@ -61,15 +62,16 @@ namespace DcsBios {
 			}
 		}
 	public:
-		RotaryEncoderT(const char* msg, const char* decArg, const char* incArg, char pinA, char pinB) :
+		RotaryEncoderT(const char* msg, const char* decArg, const char* incArg, char pinA, char pinB, const DigitalBackend* backend = &DefaultDigitalBackend) :
 			PollingInput(pollIntervalMs) {
 			msg_ = msg;
 			decArg_ = decArg;
 			incArg_ = incArg;
 			pinA_ = pinA;
 			pinB_ = pinB;
-			pinMode(pinA_, INPUT_PULLUP);
-			pinMode(pinB_, INPUT_PULLUP);
+			backend_ = backend;
+			backend_->pinMode(pinA_, INPUT_PULLUP);
+			backend_->pinMode(pinB_, INPUT_PULLUP);
 			delta_ = 0;
 			lastState_ = readState();
 		}
@@ -99,6 +101,7 @@ namespace DcsBios {
 		char lastState_;
 		signed char delta_;
 		char cw_momentum_;
+		const DigitalBackend* backend_;
 
 		const unsigned long FAST_THRESHOLD_MS=175;
 		const unsigned long STOPPED_THRESHOLD_MS=500;
@@ -107,7 +110,7 @@ namespace DcsBios {
 		unsigned long timeLastDetent_;
 		
 		char readState() {
-			return (digitalRead(pinA_) << 1) | digitalRead(pinB_);
+			return (backend_->digitalRead(pinA_) << 1) | backend_->digitalRead(pinB_);
 		}
 		
 		void resetState()
@@ -202,7 +205,7 @@ namespace DcsBios {
 			}
 		}
 	public:
-		RotaryAcceleratedEncoderT(const char* msg, const char* decArg, const char* incArg, const char* fastDecArg, const char* fastIncArg, char pinA, char pinB) :
+		RotaryAcceleratedEncoderT(const char* msg, const char* decArg, const char* incArg, const char* fastDecArg, const char* fastIncArg, char pinA, char pinB, const DigitalBackend* backend = &DefaultDigitalBackend) :
 				PollingInput(pollIntervalMs)
 		{
 			msg_ = msg;
@@ -212,8 +215,9 @@ namespace DcsBios {
 			fastIncArg_ = fastIncArg;
 			pinA_ = pinA;
 			pinB_ = pinB;
-			pinMode(pinA_, INPUT_PULLUP);
-			pinMode(pinB_, INPUT_PULLUP);
+			backend_ = backend;
+			backend_->pinMode(pinA_, INPUT_PULLUP);
+			backend_->pinMode(pinB_, INPUT_PULLUP);
 			delta_ = 0;
 			lastState_ = readState();
 			timeLastDetent_ = millis();
@@ -310,13 +314,14 @@ namespace DcsBios {
 		char prevMode_;
 		char lastState_;
 		signed char delta_;
+		const DigitalBackend* backend_;
 		
 		char readState() {
 			char currentMode;
-			msg1Mode_ = ((currentMode = digitalRead(pinToggle_)) != prevMode_)?!msg1Mode_:msg1Mode_;
+			msg1Mode_ = ((currentMode = backend_->digitalRead(pinToggle_)) != prevMode_)?!msg1Mode_:msg1Mode_;
 			prevMode_ = currentMode;
 
-			return (digitalRead(pinA_) << 1) | digitalRead(pinB_);
+			return (backend_->digitalRead(pinA_) << 1) | backend_->digitalRead(pinB_);
 		}
 		
 		void resetState() {
@@ -356,7 +361,7 @@ namespace DcsBios {
 			}
 		}
 	public:
-		EmulatedConcentricRotaryEncoderT(const char* msg1, const char* decArg1, const char* incArg1, const char* msg2, const char* decArg2, const char* incArg2, char pinA, char pinB, char pinC) :
+		EmulatedConcentricRotaryEncoderT(const char* msg1, const char* decArg1, const char* incArg1, const char* msg2, const char* decArg2, const char* incArg2, char pinA, char pinB, char pinC, const DigitalBackend* backend = &DefaultDigitalBackend) :
 			PollingInput(pollIntervalMs)
 		{
 			msg1_ = msg1;
@@ -370,11 +375,12 @@ namespace DcsBios {
 			pinB_ = pinB;
 			pinToggle_ = pinC;
 			msg1Mode_ = true;
-			
-			pinMode(pinA_, INPUT_PULLUP);
-			pinMode(pinB_, INPUT_PULLUP);
-			pinMode(pinToggle_, INPUT_PULLUP);
-			prevMode_ = digitalRead(pinToggle_);	//Prevents defaulting to secondary action on initialization
+
+			backend_ = backend;
+			backend_->pinMode(pinA_, INPUT_PULLUP);
+			backend_->pinMode(pinB_, INPUT_PULLUP);
+			backend_->pinMode(pinToggle_, INPUT_PULLUP);
+			prevMode_ = backend_->digitalRead(pinToggle_);	//Prevents defaulting to secondary action on initialization
 			
 			delta_ = 0;
 			lastState_ = readState();

@@ -16,13 +16,14 @@ namespace DcsBios {
 		char steadyState_;
 		unsigned long debounceDelay_;
 		unsigned long lastDebounceTime = 0;
+		const DigitalBackend* backend_;
 
 		unsigned int mask;
 		unsigned char shift;
 
 		char readState() {
-			if (digitalRead(pinA_) == LOW) return 0;
-			if (digitalRead(pinB_) == LOW) return 2;
+			if (backend_->digitalRead(pinA_) == LOW) return 0;
+			if (backend_->digitalRead(pinB_) == LOW) return 2;
 			return 1;
 		}
 		void resetState()
@@ -62,14 +63,15 @@ namespace DcsBios {
 	public:
 		SyncingSwitch3PosT(const char* msg, char pinA, char pinB, 
 			unsigned int syncToAddress, unsigned int syncToMask, unsigned char syncToShift,
-			unsigned long debounceDelay = 50) :
+			unsigned long debounceDelay = 50, const DigitalBackend* backend = &DefaultDigitalBackend) :
 			PollingInput(pollIntervalMs), Int16Buffer(syncToAddress)
 		{
 			msg_ = msg;
 			pinA_ = pinA;
 			pinB_ = pinB;
-			pinMode(pinA_, INPUT_PULLUP);
-			pinMode(pinB_, INPUT_PULLUP);
+			backend_ = backend;
+			backend_->pinMode(pinA_, INPUT_PULLUP);
+			backend_->pinMode(pinB_, INPUT_PULLUP);
 			lastState_ = readState();
 			steadyState_ = lastState_;
 			debounceDelay_ = debounceDelay;

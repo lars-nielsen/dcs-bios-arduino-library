@@ -14,21 +14,24 @@ namespace DcsBios {
 			int minOutput_;
 			int maxOutput_;
 			unsigned int (*map_function_)(unsigned int newValue);
+			const AnalogBackend* backend_;
 
 		public:
-			Dimmer(unsigned int address, char pin, int minOutput=0, int maxOutput=255) : Int16Buffer(address){
+			Dimmer(unsigned int address, char pin, int minOutput=0, int maxOutput=255, const AnalogBackend* backend = &DefaultAnalogBackend) : Int16Buffer(address){
 				pin_ = pin;
 				minOutput_ = minOutput;
 				maxOutput_ = maxOutput;
 				map_function_ = NULL;
+				backend_ = backend;
 			}
-			Dimmer(unsigned int address, char pin, unsigned int (*map_function)(unsigned int newValue)) : Int16Buffer(address){
+			Dimmer(unsigned int address, char pin, unsigned int (*map_function)(unsigned int newValue), const AnalogBackend* backend = &DefaultAnalogBackend) : Int16Buffer(address){
 				pin_ = pin;
 				map_function_ = map_function;
+				backend_ = backend;
 			}
 			virtual void loop() {
 				if (hasUpdatedData()) {
-					analogWrite(pin_, mapValue(getData()));
+					backend_->analogWrite(pin_, mapValue(getData()));
 				}
 			}
 			unsigned int mapValue(unsigned int value) {

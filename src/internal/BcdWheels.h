@@ -13,17 +13,18 @@ namespace DcsBios {
 		char pinB_;
 		char pinC_;
 		char pinD_;
+		const DigitalBackend* backend_;
 		char lastState_;
 		char readState()
 		{
 			int total = 0;
-			if (digitalRead(pinA_) == LOW) {total+=1;}
-			if (digitalRead(pinB_) == LOW) {total+=2;}
+			if (backend_->digitalRead(pinA_) == LOW) {total+=1;}
+			if (backend_->digitalRead(pinB_) == LOW) {total+=2;}
 			if( pinC_ ) {
-				if (digitalRead(pinC_) == LOW) {total+=4;}
+				if (backend_->digitalRead(pinC_) == LOW) {total+=4;}
 			}
 			if( pinD_ ) {
-				if (digitalRead(pinD_) == LOW) {total+=8;}
+				if (backend_->digitalRead(pinD_) == LOW) {total+=8;}
 			}
 			return total;
 		}			
@@ -44,7 +45,7 @@ namespace DcsBios {
 			}
 		}
 	public:
-		BcdWheelT(const char* msg, char pinA, char pinB, char pinC=0, char pinD=0) :
+		BcdWheelT(const char* msg, char pinA, char pinB, char pinC=0, char pinD=0, const DigitalBackend* backend = &DefaultDigitalBackend) :
 			PollingInput(pollIntervalMs),
 			msg_(msg)
 		{
@@ -52,12 +53,13 @@ namespace DcsBios {
 			pinB_ = pinB;
 			pinC_ = pinC;
 			pinD_ = pinD;
-			pinMode(pinA_, INPUT_PULLUP);
-			pinMode(pinB_, INPUT_PULLUP);
+			backend_ = backend;
+			backend_->pinMode(pinA_, INPUT_PULLUP);
+			backend_->pinMode(pinB_, INPUT_PULLUP);
 			if( pinC_ != 0)
-				pinMode(pinC_, INPUT_PULLUP);
+				backend_->pinMode(pinC_, INPUT_PULLUP);
 			if( pinD_ != 0 )
-				pinMode(pinD_, INPUT_PULLUP);
+				backend_->pinMode(pinD_, INPUT_PULLUP);
 			lastState_ = readState();
 		}
         
@@ -78,15 +80,16 @@ namespace DcsBios {
 		char pinC_;
 		char pinD_;
 		char pinE_;
+		const DigitalBackend* backend_;
 		char lastState_;
 		char readState()
 		{
 			int total = 0;
-			if (digitalRead(pinA_) == LOW) {total+=1;}
-			if (digitalRead(pinB_) == LOW) {total+=2;}
-			if (digitalRead(pinC_) == LOW) {total+=4;}
-			if (digitalRead(pinD_) == LOW) {total+=8;}
-			if (digitalRead(pinE_) == LOW) {total+=16;}
+			if (backend_->digitalRead(pinA_) == LOW) {total+=1;}
+			if (backend_->digitalRead(pinB_) == LOW) {total+=2;}
+			if (backend_->digitalRead(pinC_) == LOW) {total+=4;}
+			if (backend_->digitalRead(pinD_) == LOW) {total+=8;}
+			if (backend_->digitalRead(pinE_) == LOW) {total+=16;}
 
 			return total;
 		}
@@ -167,7 +170,7 @@ namespace DcsBios {
 			}
 		}
 	public:
-		RadioPresetT(const char* msg, char pinA, char pinB, char pinC, char pinD, char pinE) :
+		RadioPresetT(const char* msg, char pinA, char pinB, char pinC, char pinD, char pinE, const DigitalBackend* backend = &DefaultDigitalBackend) :
 			PollingInput(pollIntervalMs)
 		{
 			msg_ = msg;
@@ -176,11 +179,12 @@ namespace DcsBios {
 			pinC_ = pinC;
 			pinD_ = pinD;
 			pinE_ = pinE;
-			pinMode(pinA_, INPUT_PULLUP);
-			pinMode(pinB_, INPUT_PULLUP);
-			pinMode(pinC_, INPUT_PULLUP);
-			pinMode(pinD_, INPUT_PULLUP);
-			pinMode(pinE_, INPUT_PULLUP);
+			backend_ = backend;
+			backend_->pinMode(pinA_, INPUT_PULLUP);
+			backend_->pinMode(pinB_, INPUT_PULLUP);
+			backend_->pinMode(pinC_, INPUT_PULLUP);
+			backend_->pinMode(pinD_, INPUT_PULLUP);
+			backend_->pinMode(pinE_, INPUT_PULLUP);
 			lastState_ = readState();
 		}
         

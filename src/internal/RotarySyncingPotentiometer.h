@@ -19,7 +19,7 @@ namespace DcsBios {
 
 			inline unsigned int readState()
 			{
-				return map(analogRead(pin_), invert?1023:0, invert?0:1023, 0, 65535);
+				return map(backend_->analogRead(pin_), invert?1023:0, invert?0:1023, 0, 65535);
 			}
 
 			const char* msg_;
@@ -32,15 +32,17 @@ namespace DcsBios {
 			unsigned long lastSendTime;
 
 			int (*mapperCallback)(unsigned int, unsigned int);
+			const AnalogBackend* backend_;
 			
 		public:
 			RotarySyncingPotentiometerEWMA(const char* msg, char pin,
 				unsigned int syncToAddress, unsigned int syncToMask, unsigned char syncToShift,
-				int (*mapperCallback)(unsigned int, unsigned int)) :
+				int (*mapperCallback)(unsigned int, unsigned int), const AnalogBackend* backend = &DefaultAnalogBackend) :
 				PollingInput(pollIntervalMs), Int16Buffer(syncToAddress) {
 				msg_ = msg;
 				pin_ = pin;
-				pinMode(pin_, INPUT);
+				backend_ = backend;
+				backend_->pinMode(pin_, INPUT);
 				lastState_ = (float)readState();
 
 				this->mask = syncToMask;

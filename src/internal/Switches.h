@@ -16,7 +16,7 @@ namespace DcsBios {
 		bool reverse_;
 		unsigned long debounceDelay_;
 		unsigned long lastDebounceTime = 0;
-		const DigitalBackend* backend_; 
+		const DigitalBackend* backend_;
 
 		void resetState()
 		{
@@ -81,6 +81,7 @@ namespace DcsBios {
 		bool reverse_;
 		unsigned long debounceDelay_;
 		unsigned long lastDebounceTime = 0;
+		const DigitalBackend* backend_;
 
 		enum switchCoverStateEnum{
 			stOFF_CLOSED = 0,
@@ -103,7 +104,7 @@ namespace DcsBios {
 		}
 
 		void pollInput() {
-			char state = digitalRead(pin_);
+			char state = backend_->digitalRead(pin_);
 			if (reverse_) state = !state;
 			if (state != lastState_) {
 				lastDebounceTime = millis();
@@ -178,14 +179,15 @@ namespace DcsBios {
 		}
 
 	public:
-		SwitchWithCover2PosT(const char* switchMessage, const char* coverMessage, char pin, bool reverse = false, unsigned long debounceDelay = 50) :
+		SwitchWithCover2PosT(const char* switchMessage, const char* coverMessage, char pin, bool reverse = false, unsigned long debounceDelay = 50, const DigitalBackend* backend = &DefaultDigitalBackend) :
 			PollingInput(pollIntervalMs)
 		{ 
 			switchMsg_ = switchMessage;
 			coverMsg_ = coverMessage;
 			pin_ = pin;
-			pinMode(pin_, INPUT_PULLUP);
-			switchState_ = digitalRead(pin_);
+			backend_ = backend;
+			backend_->pinMode(pin_, INPUT_PULLUP);
+			switchState_ = backend_->digitalRead(pin_);
 			lastState_ = switchState_;
 			reverse_ = reverse;
 			debounceDelay_ = debounceDelay;
@@ -211,10 +213,11 @@ namespace DcsBios {
 		char debounceSteadyState_;
 		unsigned long debounceDelay_;
 		unsigned long lastDebounceTime = 0;
+		const DigitalBackend* backend_;
 
 		char readState() {
-			if (digitalRead(pinA_) == LOW) return 0;
-			if (digitalRead(pinB_) == LOW) return 2;
+			if (backend_->digitalRead(pinA_) == LOW) return 0;
+			if (backend_->digitalRead(pinB_) == LOW) return 2;
 			return 1;
 		}
 		void resetState()
@@ -251,14 +254,15 @@ namespace DcsBios {
 			}
 		}
 	public:
-		Switch3PosT(const char* msg, char pinA, char pinB, unsigned long debounceDelay = 50) :
+		Switch3PosT(const char* msg, char pinA, char pinB, unsigned long debounceDelay = 50, const DigitalBackend* backend = &DefaultDigitalBackend) :
 			PollingInput(pollIntervalMs)
 		{
 			msg_ = msg;
 			pinA_ = pinA;
 			pinB_ = pinB;
-			pinMode(pinA_, INPUT_PULLUP);
-			pinMode(pinB_, INPUT_PULLUP);
+			backend_ = backend;
+			backend_->pinMode(pinA_, INPUT_PULLUP);
+			backend_->pinMode(pinB_, INPUT_PULLUP);
 			lastState_ = readState();
 			debounceSteadyState_ = lastState_;
 			debounceDelay_ = debounceDelay;
@@ -285,6 +289,8 @@ namespace DcsBios {
 		char numberOfPins_;
 		char lastState_;
 		bool reverse_;
+		const DigitalBackend* backend_;
+
 		char readState() {
 			unsigned char ncPinIdx = lastState_;
 			for (unsigned char i=0; i<numberOfPins_; i++) {
@@ -292,8 +298,8 @@ namespace DcsBios {
 					ncPinIdx = i;
 				else
 				{
-					if (digitalRead(pins_[i]) == LOW && reverse_ == false) return i;
-					else if (digitalRead(pins_[i]) == HIGH && reverse_ == true) return i;
+					if (backend_->digitalRead(pins_[i]) == LOW && reverse_ == false) return i;
+					else if (backend_->digitalRead(pins_[i]) == HIGH && reverse_ == true) return i;
 				}
 			}
 			return ncPinIdx;
@@ -313,7 +319,7 @@ namespace DcsBios {
 			}
 		}
 	public:
-		SwitchMultiPosT(const char* msg, const byte* pins, char numberOfPins, bool reverse = false) :
+		SwitchMultiPosT(const char* msg, const byte* pins, char numberOfPins, bool reverse = false, const DigitalBackend* backend = &DefaultDigitalBackend) :
 			PollingInput(pollIntervalMs),
 			lastState_(0)
 		{
@@ -321,10 +327,12 @@ namespace DcsBios {
 			pins_ = pins;
 			reverse_ = reverse;
 			numberOfPins_ = numberOfPins;
+			backend_ = backend;
+
 			unsigned char i;
 			for (i=0; i<numberOfPins; i++) {
 				if( pins[i] != PIN_NC)
-					pinMode(pins[i], INPUT_PULLUP);
+					backend_->pinMode(pins[i], INPUT_PULLUP);
 			}
 			lastState_ = readState();
 		}

@@ -15,8 +15,9 @@ namespace DcsBios {
 		signed char maxSwichValue_;
 		char lastState_;
 		signed char delta_;
+		const DigitalBackend* backend_;
 		char readState() {
-			return (digitalRead(pinA_) << 1) | digitalRead(pinB_);
+			return (backend_->digitalRead(pinA_) << 1) | backend_->digitalRead(pinB_);
 		}
 		void resetState()
 		{
@@ -60,13 +61,14 @@ namespace DcsBios {
 			}
 		}
 	public:
-		RotarySwitchT(const char* msg, char pinA, char pinB, signed char maxSwichValue) :
+		RotarySwitchT(const char* msg, char pinA, char pinB, signed char maxSwichValue, const DigitalBackend* backend = &DefaultDigitalBackend) :
 			PollingInput(pollIntervalMs) {
 			msg_ = msg;
 			pinA_ = pinA;
 			pinB_ = pinB;
-			pinMode(pinA_, INPUT_PULLUP);
-			pinMode(pinB_, INPUT_PULLUP);
+			backend_ = backend;
+			backend_->pinMode(pinA_, INPUT_PULLUP);
+			backend_->pinMode(pinB_, INPUT_PULLUP);
 			delta_ = 0;
 			switchValue_ = 0;
 			maxSwichValue_ = maxSwichValue;

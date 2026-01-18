@@ -17,9 +17,9 @@ namespace DcsBios {
 			void pollInput() {
 				unsigned int state; 
 				if (reverse_)
-					state = map(analogRead(pin_), input_min_, input_max_, 65535, 0);
+					state = map(backend_->analogRead(pin_), input_min_, input_max_, 65535, 0);
 				else
-					state = map(analogRead(pin_), input_min_, input_max_, 0, 65535);
+					state = map(backend_->analogRead(pin_), input_min_, input_max_, 0, 65535);
 
 				accumulator += ((float)state - accumulator) / (float)ewma_divisor;
 				state = (unsigned int)accumulator;
@@ -43,21 +43,23 @@ namespace DcsBios {
 			bool reverse_;
 			unsigned int input_min_;
 			unsigned int input_max_;
+			const AnalogBackend* backend_;
 			
 		public:
-			PotentiometerEWMA(const char* msg, char pin, bool reverse = false, unsigned int input_min = 0, unsigned int input_max = 1023) :
+			PotentiometerEWMA(const char* msg, char pin, bool reverse = false, unsigned int input_min = 0, unsigned int input_max = 1023, const AnalogBackend backend = &DefaultAnalogBackend) :
 				PollingInput(pollIntervalMs) {
 				msg_ = msg;
 				pin_ = pin;
 				reverse_ = reverse;
 				input_min_ = input_min;
 				input_max_ = input_max;
+				backend_ = backend;
 
-				pinMode(pin_, INPUT);
+				backend_->pinMode(pin_, INPUT);
 				if (reverse_)
-					lastState_ = map(analogRead(pin_), input_min_, input_max_, 65535, 0);
+					lastState_ = map(backend_->analogRead(pin_), input_min_, input_max_, 65535, 0);
 				else
-					lastState_ = map(analogRead(pin_), input_min_, input_max_, 0, 65535);
+					lastState_ = map(backend_->analogRead(pin_), input_min_, input_max_, 0, 65535);
 			}
 
 			void SetControl( const char* msg )

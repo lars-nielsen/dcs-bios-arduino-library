@@ -11,7 +11,8 @@ namespace DcsBios {
 			
             const char* msgMode1_;
             const char* msgMode2_;
-			            
+
+			const DigitalBackend* backend_;	            
 			char buttonPin_;
 			
             char lastState_;
@@ -24,8 +25,8 @@ namespace DcsBios {
 			}
 
 			void pollInput() {
-                char mode = digitalRead(modePin_);
-				char state = digitalRead(buttonPin_);
+                char mode = backend_->digitalRead(modePin_);
+				char state = backend_->digitalRead(buttonPin_);
 
                 if(mode != lastMode_)
                 {
@@ -48,18 +49,19 @@ namespace DcsBios {
                 char modePin,
                 char buttonPin,
                 const char* msgMode1, 
-                const char* msgMode2 )	 :
+                const char* msgMode2,
+				const DigitalBackend* backend = &DefaultDigitalBackend )	 :
 				PollingInput(pollIntervalMs)
 			{
 				modePin_ = modePin;
                 buttonPin_ = buttonPin;
 				msgMode1_ = msgMode1;
                 msgMode2_ = msgMode2;
-
-				pinMode(modePin_, INPUT_PULLUP);
-                pinMode(buttonPin_, INPUT_PULLUP);
-				lastState_ = digitalRead(buttonPin_);
-                lastMode_ = digitalRead(modePin_);
+				backend_ = backend;
+				backend_->pinMode(modePin_, INPUT_PULLUP);
+                backend_->pinMode(buttonPin_, INPUT_PULLUP);
+				lastState_ = backend_->digitalRead(buttonPin_);
+                lastMode_ = backend_->digitalRead(modePin_);
 			}
 
 			void SetControl( const char* msgMode1, const char* msgMode2 )
