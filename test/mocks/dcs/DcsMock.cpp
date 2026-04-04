@@ -22,3 +22,8 @@ namespace DcsBios {
         return messageLog;
     }
 }
+
+// Global function for use by PollingInput and other code
+bool tryToSendDcsBiosMessage(const char* msg, const char* arg) {
+    return DcsBios::tryToSendDcsBiosMessage(msg, arg);
+}
