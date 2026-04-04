@@ -33,15 +33,9 @@ TEST_F(ButtonsTest, ActionButton_SendsMessageOnButtonPress) {
     TimeMock::advanceTime(1); // Advance time to trigger polling
     DcsBios::PollingInput::pollInputs(); // This should trigger the message send
 
-
-
     // Assert
     auto messages = DcsBios::getMessageLog();
     ASSERT_EQ(messages.size(), 1);
     EXPECT_EQ(messages[0].first, "TEST_BUTTON");
     EXPECT_EQ(messages[0].second, "1");
-
-    // Assert
-    // No message should be sent
-    EXPECT_TRUE(true); // Placeholder
 }
