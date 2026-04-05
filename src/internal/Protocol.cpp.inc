@@ -4,8 +4,6 @@
 #include "RingBuffer.h"
 
 namespace DcsBios {
-	ExportStreamListener* ExportStreamListener::firstExportStreamListener = NULL;
-	PollingInput* PollingInput::firstPollingInput = NULL;
 
 	ProtocolParser::ProtocolParser() {
 		processingData = false;

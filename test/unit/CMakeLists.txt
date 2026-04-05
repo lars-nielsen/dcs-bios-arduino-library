@@ -14,7 +14,6 @@ target_include_directories(dcsbios_tests PRIVATE
 
 target_link_libraries(dcsbios_tests PRIVATE
     gtest_main
-    gtest
     ArduinoMock
     DcsMock
 )
