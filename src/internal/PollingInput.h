@@ -72,8 +72,6 @@ namespace DcsBios {
 			}
 	};
 
-	PollingInput* PollingInput::firstPollingInput = NULL;
-
 	class ResettableInput
 	{
 		public:

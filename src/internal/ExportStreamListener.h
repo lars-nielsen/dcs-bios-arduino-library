@@ -51,8 +51,6 @@ namespace DcsBios {
 			virtual void loop() {}
 	};
 
-	ExportStreamListener* ExportStreamListener::firstExportStreamListener = NULL;
-
 	class Int16Buffer : public ExportStreamListener {
 		private:
 			volatile unsigned int data;

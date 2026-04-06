@@ -26,6 +26,7 @@ add_library(DcsMock
 )
 
 target_include_directories(DcsMock PUBLIC
+    mocks/arduino
     ${LIB_INCLUDE_DIRS}
 )
 
@@ -69,4 +70,3 @@ target_link_libraries(dcsbios_tests PRIVATE
 include(GoogleTest)
 
 gtest_discover_tests(dcsbios_tests)
-
