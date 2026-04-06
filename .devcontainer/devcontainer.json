@@ -4,6 +4,9 @@
 
 	 "customizations": {
 		"vscode": {
+			"settings": {
+				"cmake.sourceDirectory": "/workspaces/dcs-bios-arduino-library/tests"
+			},
 			"extensions": [
 				"ms-vscode.cpptools-extension-pack",
 				"matepek.vscode-catch2-test-adapter"
