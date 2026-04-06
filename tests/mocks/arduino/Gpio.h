@@ -3,16 +3,6 @@
 
 #include <cstdint>
 
-// Pin modes
-#define INPUT 0x0
-#define OUTPUT 0x1
-#define INPUT_PULLUP 0x2
-
-// Digital levels
-#define LOW 0x0
-#define HIGH 0x1
-
-// GPIO arrays (defined in gpio.cpp)
 extern uint8_t pinModes[256];
 extern uint8_t pinValues[256];
 

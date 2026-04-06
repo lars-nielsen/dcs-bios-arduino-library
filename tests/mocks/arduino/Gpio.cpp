@@ -1,7 +1,6 @@
 #include "Gpio.h"
 #include <cstring>
 
-// GPIO mock
 uint8_t pinModes[256];
 uint8_t pinValues[256];
 

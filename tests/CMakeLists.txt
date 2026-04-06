@@ -48,7 +48,7 @@ target_include_directories(ArduinoMock PRIVATE
 # Test Executable
 # ============================================================================
 add_executable(dcsbios_tests
-    unit/ProtocolTest.cpp
+    unit/ArduinoMockTest.cpp
     unit/ButtonsTest.cpp
 )
 
