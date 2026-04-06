@@ -26,7 +26,6 @@ add_library(DcsMock
 )
 
 target_include_directories(DcsMock PUBLIC
-    ${CMAKE_CURRENT_SOURCE_DIR}/mocks
     ${LIB_INCLUDE_DIRS}
 )
 
@@ -34,7 +33,7 @@ target_include_directories(DcsMock PUBLIC
 # Arduino Mock Library
 # ============================================================================
 add_library(ArduinoMock
-    mocks/arduino/arduino.cpp
+    mocks/arduino/Arduino.cpp
     mocks/arduino/Gpio.cpp
     mocks/arduino/Serial.cpp
     mocks/arduino/Interrupts.cpp
@@ -42,7 +41,6 @@ add_library(ArduinoMock
 )
 
 target_include_directories(ArduinoMock PRIVATE
-    ${CMAKE_CURRENT_SOURCE_DIR}/mocks
 )
 
 # ============================================================================
