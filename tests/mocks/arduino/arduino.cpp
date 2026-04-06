@@ -1,7 +1,8 @@
 #include "Arduino.h"
-#include "gpio/gpio.h"
-#include "serial/serial.h"
-#include "timing/timing.h"
+#include "Gpio.h"
+#include "Serial.h"
+#include "Timing.h"
+#include "Interrupts.h"
 
 namespace ArduinoMock {
     void reset() {

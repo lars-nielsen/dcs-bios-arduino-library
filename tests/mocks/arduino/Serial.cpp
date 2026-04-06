@@ -1,4 +1,4 @@
-#include "serial.h"
+#include "Serial.h"
 
 std::vector<uint8_t> SerialMock::inputBuffer;
 std::vector<uint8_t> SerialMock::outputBuffer;

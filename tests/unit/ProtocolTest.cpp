@@ -7,7 +7,6 @@ protected:
     void SetUp() override {
         // Reset all mocks before each test
         ArduinoMock::reset();
-        Serial.clearWrittenData();
     }
 
     void TearDown() override {

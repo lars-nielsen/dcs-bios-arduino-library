@@ -1,10 +1,11 @@
 #ifndef ARDUINO_H
 #define ARDUINO_H
 
-#include "arduino/serial/serial.h"
-#include "arduino/interrupts/interrupts.h"
-#include "arduino/gpio/gpio.h"
-#include "arduino/timing/timing.h"
+#include <cstdint>
+#include "Serial.h"
+#include "Gpio.h"
+#include "Timing.h"
+#include "Interrupts.h"
 
 #ifndef NULL
 #define NULL 0

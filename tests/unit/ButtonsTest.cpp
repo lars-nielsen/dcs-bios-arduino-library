@@ -4,7 +4,7 @@
 #include "../../src/internal/PollingInput.h"
 #include "../../src/internal/Protocol.h"
 #include "../../src/internal/Buttons.h"
-#include "../../test/mocks/dcs/DcsMock.h"
+#include "../mocks/dcs/DcsMock.h"
 
 // Test fixture for Button tests
 class ButtonsTest : public ::testing::Test {

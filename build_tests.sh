@@ -8,7 +8,7 @@ mkdir -p build
 cd build
 
 # Configure with CMake
-cmake ..
+cmake ../tests
 
 # Build
 cmake --build .

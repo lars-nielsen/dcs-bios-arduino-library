@@ -1,5 +1,5 @@
 // Interrupt mock
-#include "interrupts.h"
+#include "Interrupts.h"
 #include <cstring>
 
 static void (*interruptHandlers[8])() = {nullptr};

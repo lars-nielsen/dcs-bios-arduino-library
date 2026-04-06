@@ -1,4 +1,4 @@
-#include "gpio.h"
+#include "Gpio.h"
 #include <cstring>
 
 // GPIO mock
